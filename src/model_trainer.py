@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Embedding, SpatialDropout1D, LSTM, Dense
+from tensorflow.keras.layers import Embedding, SpatialDropout1D, LSTM, Dense, Bidirectional
 from tensorflow.keras.optimizers import Adam
 import numpy as np
 
@@ -24,7 +24,7 @@ class ModelTrainer:
         self._build_model()
     
     def _build_model(self):
-        """Build the Keras Sequential model architecture."""
+        """Build the Keras Sequential model architecture with Bi-LSTM."""
         self.model = Sequential([
             Embedding(
                 input_dim=self.vocab_size,
@@ -32,7 +32,7 @@ class ModelTrainer:
                 input_length=self.max_length
             ),
             SpatialDropout1D(0.2),
-            LSTM(100, dropout=0.2, recurrent_dropout=0.2),
+            Bidirectional(LSTM(100, dropout=0.2, recurrent_dropout=0.2)),
             Dense(1, activation='sigmoid')
         ])
         

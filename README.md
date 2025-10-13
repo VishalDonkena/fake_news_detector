@@ -105,11 +105,22 @@ Then enter news articles to analyze them for fake news detection.
 
 ## Model Architecture
 
-The model uses a feedforward neural network:
+The project supports two model architectures:
+
+### 1. TF-IDF + Dense Layers (Default)
 - Input: TF-IDF features (5000 dimensions)
 - Hidden layers: 512 → 256 → 128 neurons with ReLU activation
 - Dropout layers for regularization
 - Output: Single neuron with sigmoid activation for binary classification
+
+### 2. Bi-LSTM Architecture (Advanced)
+- Input: Word embeddings (5000 vocabulary, 128 dimensions)
+- Embedding layer: Converts words to dense vectors
+- Bidirectional LSTM: Processes text in both directions for better context understanding
+- Dropout layers for regularization
+- Output: Single neuron with sigmoid activation for binary classification
+
+The Bi-LSTM model is available in the `ModelTrainer` class and provides superior performance for text classification tasks.
 
 ## Requirements
 
