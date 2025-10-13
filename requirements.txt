@@ -1,0 +1,12 @@
+tensorflow
+torch
+transformers
+keras
+scikit-learn
+pandas
+numpy
+nltk
+spacy
+matplotlib
+seaborn
+jupyter
