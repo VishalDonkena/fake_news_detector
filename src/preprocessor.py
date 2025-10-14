@@ -10,6 +10,15 @@ try:
 except LookupError:
     nltk.download('punkt')
 
+# Newer NLTK versions require 'punkt_tab' for sentence tokenization tables
+try:
+    nltk.data.find('tokenizers/punkt_tab')
+except LookupError:
+    try:
+        nltk.download('punkt_tab')
+    except Exception:
+        pass
+
 try:
     nltk.data.find('corpora/stopwords')
 except LookupError:
