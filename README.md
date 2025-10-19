@@ -1,166 +1,104 @@
 # Fake News Detector 🔍
 
-A machine learning project for detecting fake news articles using deep learning techniques.
+A deep learning project to detect fake news articles using an LSTM (Long Short-Term Memory) neural network.
+
+## Features
+
+-   **Text Preprocessing**: Cleans and normalizes text data using NLTK (lowercase, remove punctuation, stopwords, lemmatization).
+-   **LSTM Model**: Uses a Long Short-Term Memory (LSTM) network to understand the sequence and context of words in the text.
+-   **Command-Line Interface**: Allows for real-time prediction of news articles.
+-   **Script-Based Training**: A simple Python script to train the model from scratch.
+
+## Model Architecture
+
+This project uses an LSTM-based neural network for classification. The architecture is as follows:
+
+1.  **Embedding Layer**: Converts words into dense vectors of a fixed size (128 dimensions). These embeddings capture the semantic meaning of the words.
+2.  **LSTM Layer**: Processes the sequence of word embeddings to capture contextual information from the text.
+3.  **Dropout Layers**: Used for regularization to prevent the model from overfitting.
+4.  **Dense Layers**: Fully connected layers for classification, with a final `sigmoid` activation function to output a probability between 0 and 1.
+
+This architecture was chosen to effectively learn from the sequential nature of text data and to address issues of "cheating" where the model might learn simple heuristics like article length.
+
+## Dataset
+
+The dataset used for training is a combination of two CSV files, `Fake.csv` and `True.csv`, which are preprocessed into a single `news.csv` file by the `scripts/prepare_data.py` script. The final dataset contains a `text` column with the article content and a `label` column (0 for real news, 1 for fake news).
+
+## Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/fake_news_detector.git
+    cd fake_news_detector
+    ```
+
+2.  **Create and activate a virtual environment (recommended):**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    ```
+
+3.  **Install the required dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Usage
+
+There are two main steps: preparing the data and training the model, and then running the detector.
+
+### 1. Prepare the Data
+
+First, you need to combine the raw `Fake.csv` and `True.csv` files into a single dataset for training.
+
+```bash
+python scripts/prepare_data.py
+```
+This will create the `data/processed/news.csv` file.
+
+### 2. Train the Model
+
+To train the LSTM model from scratch, run the training script:
+
+```bash
+python scripts/train_from_notebook.py
+```
+
+This script will:
+-   Load the processed data.
+-   Preprocess the text.
+-   Train the LSTM model.
+-   Save the trained model to `models/fake_news_model.h5`.
+-   Save the tokenizer to `models/tokenizer.pkl`.
+
+### 3. Run the Detector
+
+Once the model is trained, you can run the fake news detector:
+
+```bash
+python main.py
+```
+
+You will be prompted to enter a news article, and the model will predict whether it is "Fake News" or "Real News" along with a confidence score.
 
 ## Project Structure
 
 ```
 fake_news_detector/
 ├── data/
-│   ├── raw/           # Raw datasets
-│   └── processed/     # Processed/cleaned data
-├── notebooks/         # Jupyter notebooks
-│   └── 02_model_training.ipynb
+│   ├── raw/           # Raw datasets (Fake.csv, True.csv)
+│   └── processed/     # Processed data (news.csv)
 ├── src/               # Source code
-│   ├── __init__.py
-│   ├── data_loader.py
-│   ├── preprocessor.py
-│   ├── feature_extractor.py
-│   ├── model_trainer.py
-│   └── detector.py
-├── models/            # Saved models and vectorizers
+│   ├── detector.py    # Class for prediction
+│   └── preprocessor.py# Text preprocessing logic
+├── models/            # Saved model and tokenizer
+├── scripts/
+│   ├── prepare_data.py # Script to prepare the dataset
+│   └── train_from_notebook.py # Script to train the model
 ├── requirements.txt   # Python dependencies
-└── main.py           # Main user interface
+└── main.py            # Main user interface
 ```
-
-## Features
-
-- **Text Preprocessing**: Clean and normalize text data using NLTK
-- **Feature Extraction**: Convert text to numerical features using TF-IDF
-- **Deep Learning Model**: Neural network with dense layers for classification
-- **User Interface**: Command-line interface for real-time predictions
-- **Training Pipeline**: Complete Jupyter notebook for model training
-
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/VishalDonkena/fake_news_detector.git
-cd fake_news_detector
-```
-
-2. Create and activate a virtual environment:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-## Usage
-
-### Training the Model
-
-1. **Prepare your dataset**: Place your CSV file in `data/raw/` with columns `text` and `label` (0 for real news, 1 for fake news)
-
-2. **Run the training notebook**:
-```bash
-jupyter notebook notebooks/02_model_training.ipynb
-```
-
-3. **Update the dataset path** in the notebook to match your filename
-
-4. **Execute all cells** to train the model and save it to `models/`
-
-### Using the Detector
-
-Run the main interface:
-```bash
-python main.py
-```
-
-Then enter news articles to analyze them for fake news detection.
-
-## Components
-
-### Preprocessor (`src/preprocessor.py`)
-- Converts text to lowercase
-- Removes punctuation and numbers
-- Tokenizes text
-- Removes English stopwords
-- Lemmatizes tokens
-
-### Feature Extractor (`src/feature_extractor.py`)
-- Uses TF-IDF vectorization
-- Configurable parameters for feature extraction
-- Handles both training and inference
-
-### Model Trainer (`src/model_trainer.py`)
-- Deep learning model with dense layers
-- Adam optimizer with binary crossentropy loss
-- Model saving and loading capabilities
-
-### Detector (`src/detector.py`)
-- Main prediction pipeline
-- Orchestrates preprocessing, feature extraction, and prediction
-- Provides confidence scores
-
-### Data Loader (`src/data_loader.py`)
-- Dataset loading and validation
-- Support for raw and processed data
-- Dataset information and validation utilities
-
-## Model Architecture
-
-The project supports two model architectures:
-
-### 1. TF-IDF + Dense Layers (Default)
-- Input: TF-IDF features (5000 dimensions)
-- Hidden layers: 512 → 256 → 128 neurons with ReLU activation
-- Dropout layers for regularization
-- Output: Single neuron with sigmoid activation for binary classification
-
-### 2. Bi-LSTM Architecture (Advanced)
-- Input: Word embeddings (5000 vocabulary, 128 dimensions)
-- Embedding layer: Converts words to dense vectors
-- Bidirectional LSTM: Processes text in both directions for better context understanding
-- Dropout layers for regularization
-- Output: Single neuron with sigmoid activation for binary classification
-
-The Bi-LSTM model is available in the `ModelTrainer` class and provides superior performance for text classification tasks.
-
-## Requirements
-
-- Python 3.9+
-- TensorFlow 2.x
-- scikit-learn
-- pandas
-- numpy
-- nltk
-- matplotlib
-- seaborn
-- jupyter
-
-## Dataset Format
-
-Your dataset should be a CSV file with the following structure:
-
-```csv
-text,label
-"This is a real news article about important events.",0
-"This is clearly fake news with misleading information.",1
-```
-
-- `text`: The news article content
-- `label`: 0 for real news, 1 for fake news
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
 
 ## License
 
 This project is open source and available under the MIT License.
-
-## Acknowledgments
-
-- Built using TensorFlow/Keras for deep learning
-- Uses NLTK for natural language processing
-- scikit-learn for feature extraction and evaluation metrics
