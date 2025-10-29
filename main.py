@@ -178,23 +178,21 @@ INDEX_HTML = """
         const resDiv = document.getElementById('result');
         try {
           const predLabel = (data && data.prediction) ? data.prediction : 'Unknown';
-          const prob = (data && typeof data.probability === 'number') ? (data.probability * 100) : null;
+          /* removed probability */
           const conf = (data && typeof data.confidence === 'number') ? (data.confidence * 100) : null;
           const color = predLabel.toLowerCase().includes('fake') ? '#b00020' : '#1a7f1a';
-          const probText = (prob !== null) ? (Math.round(prob * 100) / 100).toFixed(2) + '%' : 'N/A';
+          /* removed probability text */
           const confText = (conf !== null) ? (Math.round(conf * 100) / 100).toFixed(2) + '%' : 'N/A';
           resDiv.innerHTML =
             '<div style="font-family: inherit;">' +
               '<div class="result-label" style="color:' + color + ';">' + predLabel + '</div>' +
               '<div style="font-size:14px; color:#444;">' +
-                'Probability: <strong>' + probText + '</strong>' +
-                ' &nbsp;&nbsp; Confidence: <strong>' + confText + '</strong>' +
+                'Confidence: <strong>' + confText + '</strong>' +
               '</div>' +
-              '<div style="margin-top:10px; font-size:12px; color:#666;">Raw output (debug):</div>' +
-              '<pre style="margin-top:6px;">' + JSON.stringify(data, null, 2) + '</pre>' +
+              '' +
             '</div>';
         } catch (err) {
-          resDiv.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+          resDiv.innerHTML = '<div class="muted">Result received.</div>';
         }
       }
 
@@ -253,13 +251,10 @@ def predict():
     try:
         prediction, confidence = det.predict_with_confidence(text)
         # The model outputs probability for "Fake" in detector; reconstruct it:
-        probability_fake = (
-            confidence if prediction == "Fake News" else (1.0 - confidence)
-        )
+        # removed probability calculation (no longer returned by API)
         return jsonify(
             {
                 "prediction": prediction,
-                "probability": float(probability_fake),
                 "confidence": float(confidence),
             }
         )
