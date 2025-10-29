@@ -101,7 +101,7 @@ INDEX_HTML = """
       .desc { margin: 0 0 14px 0; color: #444; }
       .card { background: var(--card); border-radius: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); padding: 16px; }
       label { display:block; font-weight: 600; margin-bottom: 6px; }
-      textarea { width: 100%; min-height: 200px; font-size: 14px; padding: 10px; border-radius: 6px; border: 1px solid #ddd; outline: none; }
+      textarea { width: 100%; min-height: 360px; font-size: 14px; padding: 10px; border-radius: 6px; border: 1px solid #ddd; outline: none; }
       textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43,124,255,0.15); }
       .actions { margin-top: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
       button, .btn { display: inline-block; padding: 10px 14px; border-radius: 6px; text-decoration: none; border: 0; cursor: pointer; }
